@@ -17,7 +17,7 @@ public:
 class ShoppingCart 
 {
 private:
-    static const int maxCapacity = 5;  // Maximum capacity for the shopping cart
+    static const int maxCapacity = 5;  
     Product products[maxCapacity];
     int size;
     double totalCost;
@@ -59,7 +59,7 @@ public:
 };
 int main() 
 {
-    // Demonstrating Composition
+   
     ShoppingCart cart;
     Product p1(1, "Product1", 10.99);
     Product p2(2, "Product2", 5.99);
@@ -68,7 +68,7 @@ int main()
     cout << "All Products in Cart:" << endl;
     cart.displayAllProducts();
     cout << "Total Cost: $" << cart.calculateTotalCost() << endl;
-    // Demonstrating Association
+    
     User user1(101);
     user1.cart = cart;
     user1.displayUserDetails();
