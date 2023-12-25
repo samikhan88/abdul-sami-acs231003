@@ -1,13 +1,13 @@
 #include <iostream>
 #include<string>
 using namespace std;
-class ElectronicDevice //abstract base class
+class ElectronicDevice 
 {
 public:
-    virtual void turn_On()  = 0;   // Pure virtual function
-    virtual void turn_Off()  = 0;  // Pure virtual function
+    virtual void turn_On()  = 0;   
+    virtual void turn_Off()  = 0;  
 };
-//first derived class from base class in public mode
+
 class Television : public ElectronicDevice
  {
 public:
@@ -21,7 +21,7 @@ public:
        cout  << "Television is turned off." << endl;
     }
 };
-//second class derived from base class in public mode
+
 class Laptop : public ElectronicDevice
  {
 public:
