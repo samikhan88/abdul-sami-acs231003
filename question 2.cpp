@@ -1,78 +1,116 @@
 #include <iostream>
 #include <string>
 using namespace std;
-class Product
- {
-public:
-    int productId;
+
+class Product {
+private:
+    string productId;
     string productName;
     double price;
-    Product(int id, const string& name, double p)
-        : productId(id), productName(name), price(p) {}
-    void displayProductDetails()
-     {
-        cout << "Product ID: " << productId << ", Name: " << productName << ", Price: $" << price << endl;
-    }
-};
-class ShoppingCart 
-{
-private:
-    static const int maxCapacity = 5;  
-    Product products[maxCapacity];
-    int size;
-    double totalCost;
 
 public:
-    ShoppingCart() : size(0), totalCost(0.0) {}
-    void addProduct(const Product& product) 
-    {
-        if (size < maxCapacity)
-            {
-            products[size++] = product;
-            totalCost += product.price;
+    Product(string id, string name, double cost) : productId(id), productName(name), price(cost) {}
+
+    void displayDetails() {
+        cout << "Product ID: " << productId << endl;
+        cout << "Product Name: " << productName << endl;
+        cout << "Price: $" << price << endl;
+    }
+};
+
+class ShoppingCart {
+private:
+    Product** products;
+    int numProducts;
+
+public:
+    ShoppingCart() : products(nullptr), numProducts(0) {}
+
+    void addProduct(Product* product) {
+        Product** newProducts = new Product*[numProducts + 1];
+        for (int i = 0; i < numProducts; i++) {
+            newProducts[i] = products[i];
         }
-        else
-            {
-            cout << "Shopping Cart is full. Cannot add more products." << endl;
+        newProducts[numProducts] = product;
+        delete[] products;
+        products = newProducts;
+        numProducts++;
+    }
+
+    void displayAllProducts() {
+        for (int i = 0; i < numProducts; i++) {
+            products[i]->displayDetails();
+            cout << endl;
         }
     }
-    void displayAllProducts() 
-    {
-        for (int i = 0; i < size; ++i)
-            {
-            products[i].displayProductDetails();
-        }
-    }
+
     double calculateTotalCost() {
+        double totalCost = 0;
+        for (int i = 0; i < numProducts; i++) {
+            totalCost += products[i]->getPrice();
+        }
         return totalCost;
     }
 };
+
 class User {
+private:
+    string userId;
+    ShoppingCart* cart;
+
 public:
-    int userId;
-    ShoppingCart cart;
-    User(int id) : userId(id) {}
-    void displayUserDetails()
-     {
+    User(string id) : userId(id), cart(nullptr) {}
+
+    void setShoppingCart(ShoppingCart* shoppingCart) {
+        cart = shoppingCart;
+    }
+
+    void displayUserDetails() {
         cout << "User ID: " << userId << endl;
+        if (cart != nullptr) {
+            cout << "User has a shopping cart" << endl;
+        } else {
+            cout << "User does not have a shopping cart" << endl;
+        }
     }
 };
-int main() 
-{
-   
-    ShoppingCart cart;
-    Product p1(1, "Product1", 10.99);
-    Product p2(2, "Product2", 5.99);
-    cart.addProduct(p1);
-    cart.addProduct(p2);
-    cout << "All Products in Cart:" << endl;
-    cart.displayAllProducts();
-    cout << "Total Cost: $" << cart.calculateTotalCost() << endl;
-    
-    User user1(101);
-    user1.cart = cart;
-    user1.displayUserDetails();
-    cout << "User's Cart Details:" << endl;
-    user1.cart.displayAllProducts();
+
+int main() {
+    // Create products
+    Product* product1 = new Product("P001", "Product 1", 10.99);
+    Product* product2 = new Product("P002", "Product 2", 5.99);
+    Product* product3 = new Product("P003", "Product 3", 15.99);
+
+    // Create shopping cart
+    ShoppingCart* cart = new ShoppingCart();
+
+    // Add products to the cart
+    cart->addProduct(product1);
+    cart->addProduct(product2);
+    cart->addProduct(product3);
+
+    // Create user
+    User* user = new User("U001");
+
+    // Associate shopping cart with user
+    user->setShoppingCart(cart);
+
+    // Display user details
+    user->displayUserDetails();
+
+    // Display all products in the cart
+    cart->displayAllProducts();
+
+    // Calculate total cost
+    double totalCost = cart->calculateTotalCost();
+    cout << "Total Cost: $" << totalCost << endl;
+
+    // Clean up memory
+    delete product1;
+    delete product2;
+    delete product3;
+    delete cart;
+    delete user;
+
     return 0;
 }
