@@ -1,51 +1,44 @@
-#include <iostream>
-#include<string>
-using namespace std;
-class ElectronicDevice 
-{
+include <iostream>
+
+// Abstract base class Animal
+class Animal {
 public:
-    virtual void turn_On()  = 0;   
-    virtual void turn_Off()  = 0;  
+    virtual void makeSound() = 0; // Pure virtual function
 };
 
-class Television : public ElectronicDevice
- {
+// Concrete derived classes
+class Dog : public Animal {
 public:
-    void turn_On()  //override
-    {
-       cout << "Television is turned on." << endl;
-    }
-
-    void turn_Off()
-     {
-       cout  << "Television is turned off." << endl;
+    void makeSound() override {
+        std::cout << "Woof!" << std::endl;
     }
 };
 
-class Laptop : public ElectronicDevice
- {
+class Cat : public Animal {
 public:
-    void turn_On()
-    {
-        cout << "Laptop is starting up." << endl;
-    }
-
-    void turn_Off()
-     {
-        cout << "Laptop is shutting down." << endl;
+    void makeSound() override {
+        std::cout << "Meow!" << std::endl;
     }
 };
-int main()
-{
-    Television tv;
-    Laptop laptop;
-    ElectronicDevice* device1 = &tv;
-    ElectronicDevice* device2 = &laptop;
-    cout << "#####FOR TV #####" << endl;
-    device1->turn_On();
-    device1->turn_Off();
-    cout << "##### FOR LAPTOP #####" << endl;
-    device2->turn_On();
-    device2->turn_Off();
+
+class Bird : public Animal {
+public:
+    void makeSound() override {
+        std::cout << "Chirp!" << std::endl;
+    }
+};
+
+int main() {
+    Animal* animals[] = {new Dog(), new Cat(), new Bird()};
+
+    for (Animal* animal :animals) {
+        animal->makeSound(); // Polymorphic call to makeSound()
+    }
+
+    // Properly deallocate memory
+    for (Animal* animal : animals) {
+        delete animal;
+    }
+
     return 0;
 }
